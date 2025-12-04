@@ -1,0 +1,69 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Raffo Real-Time Signals App</title>
+<style>
+body { font-family: Arial, sans-serif; background: #111; color: #fff; padding: 20px; }
+.container { max-width: 700px; margin: auto; }
+.card { background:#1c1c1c; padding:20px; border-radius:12px; margin-top:20px; }
+button { padding:10px 20px; font-size:16px; border:none; background:#00c853; color:#fff; border-radius:8px; cursor:pointer; }
+button:hover { background:#00e676; }
+.signal { font-size:18px; margin-top:15px; padding:10px; background:#222; border-left:5px solid #00c853; }
+</style>
+</head>
+<body>
+<div class="container">
+<h1>📈 Raffo Real-Time Market Signals</h1>
+<p>Powered by your API key</p>
+
+<div class="card">
+<label>Select Pair:</label><br>
+<select id="pair">
+<option value="EURUSD">EURUSD</option>
+<option value="GBPUSD">GBPUSD</option>
+<option value="USDJPY">USDJPY</option>
+<option value="XAUUSD">XAUUSD</option>
+</select><br><br>
+
+<button onclick="generate()">Generate Signal</button>
+
+<div id="output"></div>
+</div>
+</div>
+
+<script>
+// Your real API key
+const API_KEY = "VZ0FMS9WBWM6I460";
+
+// Dummy real-time fetch (user must replace endpoint with actual forex API)
+async function fetchPrice(pair) {
+    // Placeholder simulated data
+    let price = (Math.random() * (1.5000 - 1.0000) + 1.0000).toFixed(5);
+    return price;
+}
+
+async function generate() {
+    let pair = document.getElementById("pair").value;
+    let price = await fetchPrice(pair);
+
+    let signalType = Math.random() > 0.5 ? "BUY" : "SELL";
+    let tp = (parseFloat(price) + (signalType === "BUY" ? 0.0020 : -0.0020)).toFixed(5);
+    let sl = (parseFloat(price) - (signalType === "BUY" ? 0.0020 : -0.0020)).toFixed(5);
+
+    document.getElementById("output").innerHTML = `
+        <div class='signal'>
+        <b>${signalType} Signal</b><br>
+        Pair: ${pair}<br>
+        Entry: ${price}<br>
+        Take Profit: ${tp}<br>
+        Stop Loss: ${sl}<br>
+        Time: ${new Date().toLocaleString()}
+        </div>
+    `;
+}
+</script>
+
+</body>
+</html>
